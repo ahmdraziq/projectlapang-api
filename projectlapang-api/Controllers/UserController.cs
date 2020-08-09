@@ -38,16 +38,9 @@ namespace projectlapang_api.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult getlistuser(string t)
+        public IHttpActionResult getuserby(string q)
         {
-            var email = AuthController.ValidateToken(t);
-            var users = db.Users.Select(x => new
-            {
-                x.email,
-                x.usertypeid,
-                x.phoneno,
-                x.fullname
-            }).Where(x => x.email != email && x.usertypeid != 1).ToList();
+            var users = db.Users.FirstOrDefault(x => x.phoneno == q || x.email == q);
 
             if (users == null)
             {
