@@ -38,16 +38,21 @@ namespace projectlapang_api.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult getuserby(string q)
+        public IHttpActionResult getuserby(string t, string q)
         {
-            var users = db.Users.FirstOrDefault(x => x.phoneno == q || x.email == q);
+            var email = AuthController.ValidateToken(t);
+            var user = db.Users.FirstOrDefault(x => x.phoneno == q || x.email == q);
 
-            if (users == null)
+            if (user == null)
             {
                 return NotFound();
             }
+            else if (email == user.email)
+            {
+                return BadRequest("You cannot create chatroom with yourself");
+            }
 
-            return Ok(users);
+            return Ok(user);
         }
     }
 }
